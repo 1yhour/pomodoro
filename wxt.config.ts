@@ -7,5 +7,8 @@ export default defineConfig({
   srcDir: 'src',
   vite: () => ({
     plugins: [tailwindcss()],
-  })
+  }),
+  manifest: {
+    permissions: ["notifications", "alarms", "storage"]
+  }
 });

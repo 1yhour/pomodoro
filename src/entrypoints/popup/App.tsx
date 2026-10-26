@@ -1,35 +1,34 @@
-import { useState } from 'react';
-import reactLogo from '@/assets/react.svg';
-import wxtLogo from '/wxt.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+export default function App() {
+  const [endTime, setEndTime] = useState<number | null>(null);
+  const [now, setNow] = useState(Date.now());
+  useEffect(() => {
+    browser.storage.local.get("timer").then((res: any) => {
+      setEndTime(res.timer?.endTime ?? null);
+    })
+    const onChange = (changes: Record<string, any>) => {
+      if(changes.timer){
+        setEndTime(changes.timer?.newValue?.endTime ?? null);
+      }
+    }
+    browser.storage.onChanged.addListener(onChange);
+    return () => browser.storage.onChanged.removeListener(onChange);
+  }, [])
 
-function App() {
-  const [count, setCount] = useState(0);
-
+   useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const remainingSeconds = endTime ? Math.max(0, Math.ceil((endTime - now) / 1000)) : 0;
+  const mm = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
+  const ss = String(remainingSeconds % 60).padStart(2, '0');
   return (
-    <>
+    <div className="w-75">
+      <div className="text-4xl font-bold">{mm}:{ss}</div>
       <div>
-        <a href="https://wxt.dev" target="_blank">
-          <img src={wxtLogo} className="logo" alt="WXT logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Button onClick={() => browser.runtime.sendMessage({ type: "START", minutes: 0.5 })}>Start</Button>
       </div>
-      <h1>WXT + React</h1>
-      <div className="card" >
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the WXT and React logos to learn more
-      </p>
-    </>
-  );
+    </div>
+  )
 }
-
-export default App;
