@@ -1,34 +1,25 @@
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Header } from "@/components/Header";
+import { BottomNav } from "@/components/BottomNav";
+import { TimerView } from "@/views/TimerView";
+import { TasksView } from "@/views/TasksView";
+import { HistoryView } from "@/views/HistoryView";
+import { SettingsView } from "@/views/SettingsView";
+import type { TabId } from "@/lib/tabs";
 export default function App() {
-  const [endTime, setEndTime] = useState<number | null>(null);
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    browser.storage.local.get("timer").then((res: any) => {
-      setEndTime(res.timer?.endTime ?? null);
-    })
-    const onChange = (changes: Record<string, any>) => {
-      if(changes.timer){
-        setEndTime(changes.timer?.newValue?.endTime ?? null);
-      }
-    }
-    browser.storage.onChanged.addListener(onChange);
-    return () => browser.storage.onChanged.removeListener(onChange);
-  }, [])
+  const [tab, setTab] = useState<TabId>("timer");
 
-   useEffect(() => {
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, []);
-  const remainingSeconds = endTime ? Math.max(0, Math.ceil((endTime - now) / 1000)) : 0;
-  const mm = String(Math.floor(remainingSeconds / 60)).padStart(2, '0');
-  const ss = String(remainingSeconds % 60).padStart(2, '0');
   return (
-    <div className="w-75">
-      <div className="text-4xl font-bold">{mm}:{ss}</div>
-      <div>
-        <Button onClick={() => browser.runtime.sendMessage({ type: "START", minutes: 0.5 })}>Start</Button>
-      </div>
+    <div className="flex h-full flex-col gap-3 p-3">
+      <Header tab={tab} />
+      <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+        {tab === "timer" && <TimerView />}
+        {tab === "tasks" && <TasksView />}
+        {tab === "history" && <HistoryView />}
+        {tab === "settings" && <SettingsView />}
+      </main>
+
+      <BottomNav tab={tab} onChange={setTab} />
     </div>
-  )
+  );
 }

@@ -7,6 +7,10 @@ export default defineBackground(() => {
       browser.alarms.create(ALARMS_NAME, { when: endTime })
       browser.storage.local.set({ timer: { running: true, endTime } })
     }
+    if (msg.type === "STOP") {
+      browser.alarms.clear(ALARMS_NAME)
+      browser.storage.local.set({ timer: { running: false, endTime: null } })
+    }
   })
   browser.alarms.onAlarm.addListener(async (alarm) => {
     if (alarm.name !== ALARMS_NAME) return
