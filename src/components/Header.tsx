@@ -10,7 +10,7 @@ export function Header({ tab }: HeaderProps) {
 
   return (
     <header className="flex items-center gap-3 rounded-2xl border border-pomo-line bg-pomo-card px-3 py-2.5">
-      <span className="text-2xl"><img src={chrome.runtime.getURL(logoUrl)} alt={title} className="size-10" /></span>
+      <span className="text-2xl"><img src={browser.runtime.getURL(logoUrl)} alt={title} className="size-10" /></span>
       <h1 className="text-lg font-medium">Pomodoro</h1>
       
         

@@ -1,6 +1,6 @@
 {
-  "name": "wxt-react-starter",
-  "description": "manifest.json description",
+  "name": "pomodoro",
+  "description": "A Pomodoro timer with task tracking and session history to help you stay focused and productive.",
   "private": true,
   "version": "0.0.0",
   "type": "module",
