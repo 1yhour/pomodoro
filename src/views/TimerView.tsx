@@ -5,6 +5,7 @@ import TimeRing from "@/components/TimerSection/TimeRing";
 import ActiveCard from "@/components/TimerSection/ActiveCard";
 import FocusTask from "@/components/TimerSection/FocusTask";
 import { useTimer } from "@/hooks/useTimer";
+import { useTasks } from "@/hooks/useTasks";
 const MODES = [
   { id: "focus", label: "Pomodoro", minutes: 25, icon: Flame },
   { id: "short", label: "Short", minutes: 5, icon: Coffee },
@@ -23,7 +24,9 @@ export function TimerView() {
     minutesLeft,
     progress,
     setMode,
+
   } = useTimer();
+  const { activeTask, update, remove } = useTasks();
 
   return (
     <div className="flex flex-col gap-3">
@@ -69,7 +72,7 @@ export function TimerView() {
             <span className="mr-1 text-pomo-green">●</span>Cycle {cycle} of 4
           </span>
         </TimeRing>
-        <FocusTask/>
+        <FocusTask task={activeTask}/>
           <div className="flex w-full max-w-[224px] gap-2">
           <Button size="default" onClick={()=> reset()} className="flex size-8 cursor-pointer items-center justify-center rounded-xl bg-pomo-raised text-pomo-muted hover:text-pomo-fg">
             <RotateCcw size={16} />
@@ -84,7 +87,7 @@ export function TimerView() {
           </Button>
         </div>
       </section>
-      <ActiveCard minutesLeft={minutesLeft} cycle={cycle} />
+      <ActiveCard task={activeTask} minutesLeft={minutesLeft} cycle={cycle} onEdit={update} onDelete={remove} />
     </div>
   );
 }

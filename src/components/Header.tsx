@@ -1,6 +1,7 @@
 import { TAB_META, type TabId } from "@/lib/tabs";
 import { Button } from "./ui/button";
 import {Plus} from "lucide-react";
+import DialogCard from "./TaskSection/DialogCard";
 type HeaderProps = {
   tab: TabId;
 };
@@ -18,9 +19,7 @@ export function Header({ tab }: HeaderProps) {
         S2/4
       </span>
       <span className="text-xs text-pomo-muted">Timer</span>
-      <Button className="ml-auto flex cursor-pointer items-center gap-1 rounded-lg bg-pomo-raised px-2.5 py-1.5 text-xs text-pomo-muted hover:text-pomo-fg">
-        <Plus size={14} /> New
-      </Button>
+      <DialogCard />
     </header>
   );
 }

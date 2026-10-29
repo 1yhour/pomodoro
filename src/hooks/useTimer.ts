@@ -41,7 +41,7 @@ export function useTimer() {
 
   useEffect(() => {
     if (!isCounting) return;
-    const id = window.setInterval(() => setNow(Date.now()), 250);
+    const id = window.setInterval(() => setNow(Date.now()), 250); // window.setInterval() This runs a function repeatedly at a specified interval.
     return () => window.clearInterval(id);
   }, [isCounting]);
 

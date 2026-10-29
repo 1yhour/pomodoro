@@ -12,7 +12,7 @@ export default function App() {
   return (
     <div className="flex h-full flex-col gap-3 p-3">
       <Header tab={tab} />
-      <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+      <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain scrollbar-none">
         {tab === "timer" && <TimerView />}
         {tab === "tasks" && <TasksView />}
         {tab === "history" && <HistoryView />}
