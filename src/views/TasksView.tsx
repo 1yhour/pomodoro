@@ -1,47 +1,23 @@
-import { useState } from "react";
 import { DeleteDialog } from "@/components/TaskSection/DeleteDialog";
 import { TaskForm } from "@/components/TaskSection/TaskForm";
 import { TaskItem } from "@/components/TaskSection/TaskItem";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import EditTaskDialog from "@/components/TaskSection/DialogEdit";
 import { useTasks } from "@/hooks/useTasks";
-import type { Task, TaskInput, TaskResult } from "@/lib/tasks";
+import { useTaskDialogs } from "@/hooks/useTaskDialog";
 
 export function TasksView() {
   const {
     tasks,
     loading,
     add,
-    update,
     toggle,
-    remove,
     activeTask,
     setActiveTask,
     completedCount,
     totalCount,
   } = useTasks();
-  const [editing, setEditing] = useState<Task | null>(null);
-  const [deleting, setDeleting] = useState<Task | null>(null);
-
-  async function handleUpdate(input: TaskInput): Promise<TaskResult<Task>> {
-    if (!editing) return { ok: false, errors: { form: "No task selected." } };
-
-    const result = await update(editing.id, input);
-    if (result.ok) setEditing(null);
-    return result;
-  }
-
-  async function handleConfirmDelete() {
-    if (!deleting) return;
-    await remove(deleting.id);
-    setDeleting(null);
-  }
-
+  const {handleConfirmDelete, handleUpdate, openEdit, closeDelete ,closeEdit, openDelete, deleting ,editing} =useTaskDialogs();
+  const completed = tasks.filter((task)=>task.isCompleted);
   return (
     <div className="flex flex-col gap-3">
       <TaskForm onSubmit={add} submitLabel="Add task" autoFocus />
@@ -71,43 +47,23 @@ export function TasksView() {
               isActive={task.id === activeTask?.id}
               onToggle={toggle}
               onFocus={(picked) => setActiveTask(picked.id)}
-              onEdit={setEditing}
-              onDelete={setDeleting}
+              onEdit={openEdit}
+              onDelete={openDelete}
             />
           ))}
         </ul>
       )}
-
-      <Dialog
-        open={editing !== null}
-        onOpenChange={(open) => {
-          if (!open) setEditing(null);
-        }}
-      >
-        <DialogContent className="max-w-[320px] gap-3 rounded-2xl border-pomo-line bg-pomo-card p-4 text-pomo-fg">
-          <DialogHeader className="space-y-1">
-            <DialogTitle className="text-sm font-semibold">Edit task</DialogTitle>
-            <DialogDescription className="text-[11px] text-pomo-muted">
-              Update the title, length or description.
-            </DialogDescription>
-          </DialogHeader>
-
-          <TaskForm
-            initialValues={editing}
-            onSubmit={handleUpdate}
-            submitLabel="Save changes"
-            onCancel={() => setEditing(null)}
-            autoFocus
-            className="border-0 bg-transparent p-0"
-          />
-        </DialogContent>
-      </Dialog>
+      <EditTaskDialog
+        task={editing}
+        onSubmit={handleUpdate}
+        onClose={closeEdit}
+      />
 
       <DeleteDialog
         open={deleting !== null}
         taskTitle={deleting?.title ?? ""}
         onOpenChange={(open) => {
-          if (!open) setDeleting(null);
+          if (!open) closeDelete;
         }}
         onConfirm={handleConfirmDelete}
       />

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 export type TaskItemProps = {
   task: Task;
-  isActive: boolean;
+  isActive?: boolean;
   onToggle: (id: string) => void;
   onFocus: (task: Task) => void;
   onEdit: (task: Task) => void;

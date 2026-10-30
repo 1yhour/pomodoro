@@ -15,7 +15,7 @@ export default function App() {
       <main className="min-h-0 flex-1 overflow-y-auto overscroll-contain scrollbar-none">
         {tab === "timer" && <TimerView />}
         {tab === "tasks" && <TasksView />}
-        {tab === "history" && <HistoryView />}
+        {tab === "history" && <HistoryView/>}
         {tab === "settings" && <SettingsView />}
       </main>
 
