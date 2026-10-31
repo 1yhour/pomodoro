@@ -1,10 +1,10 @@
-import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'wxt';
-
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "wxt";
+import { resolve } from "node:path";
 // See https://wxt.dev/api/reference/wxt/interfaces/inlineconfig.html
 export default defineConfig({
-  modules: ['@wxt-dev/module-react'],
-  srcDir: 'src',
+  modules: ["@wxt-dev/module-react"],
+  srcDir: "src",
   vite: () => ({
     plugins: [tailwindcss()],
   }),
@@ -23,5 +23,9 @@ export default defineConfig({
       96: "icon/96.png",
       128: "icon/128.png",
     },
-  }
+  },
+  webExt: {
+    chromiumProfile: resolve(".wxt/chrome-data"),
+    keepProfileChanges: true,
+  },
 });
